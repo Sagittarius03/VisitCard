@@ -88,13 +88,6 @@ class SitemapLoader:
 
 sitemaps = SitemapLoader()
 
-print("=" * 50)
-print("📋 SITEMAP (ленивая загрузка):")
-site_url = get_site_url()
-print(f"  SITE_URL: {site_url}")
-print(f"  DEBUG: {settings.DEBUG}")
-print("=" * 50)
-
 
 # ============================================================
 #  КАСТОМНЫЕ ВЬЮХИ ДЛЯ SITEMAP
@@ -242,7 +235,7 @@ urlpatterns = [
     path('filer/', include('filer.urls')),
 ]
 
-urlpatterns += load_custom_apps_urls()
+urlpatterns += load_custom_apps_urls() or [path("", lambda request: HttpResponse("Нет URL"),)]
 
 # Подключаем статику и медиа в режиме отладки
 if settings.DEBUG:

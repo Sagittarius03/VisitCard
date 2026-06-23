@@ -2,4 +2,6 @@
 **.env
 .sqlite3
 **.log
+**.pyc
 .vscode
+__pycache__
