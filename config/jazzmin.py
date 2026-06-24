@@ -6,18 +6,18 @@ JAZZMIN_SETTINGS = {
     "default_theme_mode": "auto",
     
     # Название вкладки браузера и заголовки
-    "site_title": "Legion21 Админка",
-    "site_header": "Legion21",
-    "site_brand": "Legion21 CMS",
+    "site_title": "Визитка Админка",
+    "site_header": "Визитка",
+    "site_brand": "Визитка CMS",
     # "site_logo": '/static/main/icon/favicon.svg',     
-    "site_icon": '/static/main/icon/favicon-32x32.png',  # Фавикон (32x32 px)# Путь к вашему логотипу
+    # "site_icon": '/main/icon/favicon-32x32.png',  # Фавикон (32x32 px)# Путь к вашему логотипу
     
     
     # Приветствие на странице входа
-    "welcome_sign": "Добро пожаловать в Legion21 CMS",
+    "welcome_sign": "Добро пожаловать в Визитка CMS",
     
     # Копирайт в футере
-    "copyright": "Legion21",
+    "copyright": "Визитка",
     
     # Показывать иконку переключения темы в шапке (удобно для тестирования)
     "show_theme_chooser": True,  # <-- Позволяет быстро переключаться

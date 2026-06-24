@@ -1,0 +1,195 @@
+/* static/admin/css/filer-dark-theme-fix.css */
+
+/* ============================================
+   ПЕРЕОПРЕДЕЛЕНИЕ CSS ПЕРЕМЕННЫХ FILER
+   ============================================ */
+
+.filebrowser,
+.popup.filebrowser,
+body.popup.filebrowser {
+    --dca-white: #2b2b2b !important;
+    --body-bg: #2b2b2b !important;
+    --darkened-bg: #1e1e1e !important;
+    --dca-gray-lighter: #444 !important;
+    --border-color: #444 !important;
+    --dca-gray-light: #ddd !important;
+    --body-quiet-color: #aaa !important;
+    --button-bg: #3a3a3a !important;
+    --button-fg: #ddd !important;
+    --button-hover-bg: #4a4a4a !important;
+    --link-fg: #79aec8 !important;
+    --dca-gray-super-lightest: #252525 !important;
+}
+
+/* ============================================
+   ВИДЖЕТ ВЫБОРА ФАЙЛА (filerFile js-file-selector)
+   ============================================ */
+
+/* Основной контейнер виджета */
+.filerFile,
+.js-file-selector {
+    display: inline-flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background-color: #2b2b2b !important;
+    padding: 8px 12px !important;
+    border-radius: 6px !important;
+    border: 1px solid #444 !important;
+}
+
+/* Миниатюра изображения */
+.filerFile .thumbnail_img,
+.js-file-selector .thumbnail_img {
+    background-color: #1e1e1e !important;
+    border-radius: 4px !important;
+    padding: 2px !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
+    object-fit: cover !important;
+}
+
+/* Текст описания файла */
+.filerFile .description_text,
+.js-file-selector .description_text {
+    color: #ddd !important;
+    font-size: 13px !important;
+}
+
+/* Ссылки в виджете (кнопки) */
+.filerFile a,
+.js-file-selector a {
+    background-color: #3a3a3a !important;
+    color: #ddd !important;
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    border: 1px solid #555 !important;
+}
+
+.filerFile a:hover,
+.js-file-selector a:hover {
+    background-color: #4a4a4a !important;
+    color: #fff !important;
+    border-color: #79aec8 !important;
+}
+
+/* Кнопка "Выбрать файл" */
+.choose-file {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+/* Кнопка очистки */
+.filerClearer {
+    background-color: #5a1e1e !important;
+    cursor: pointer !important;
+}
+
+.filerClearer:hover {
+    background-color: #8a2e2e !important;
+}
+
+.filerClearer .fa-close {
+    color: #ff8888 !important;
+}
+
+/* Кнопка редактирования */
+.edit-file {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+/* Скрытые поля */
+.filerFile .hidden,
+.js-file-selector .hidden {
+    display: none !important;
+}
+
+/* Dropzone внутри виджета */
+.filer-dropzone {
+    background-color: #252525 !important;
+    border: 2px dashed #555 !important;
+    border-radius: 8px !important;
+}
+
+/* ============================================
+   ОСТАЛЬНЫЕ ЭЛЕМЕНТЫ FILER
+   ============================================ */
+
+/* Навигация сверху */
+.navigator-top-nav {
+    background: #252525 !important;
+    border-bottom: 1px solid #444 !important;
+}
+
+/* Основная область контента */
+.filebrowser #content-main {
+    background-color: #2b2b2b !important;
+}
+
+/* Таблица с файлами */
+.filebrowser .navigator-list .navigator-body,
+.filebrowser .navigator-list .unfiled td,
+.filebrowser .navigator-table .navigator-body,
+.filebrowser .navigator-table .unfiled td {
+    background-color: #1e1e1e !important;
+    padding: 12px 5px !important;
+}
+
+/* Пагинация */
+.nav-pages {
+    background: #1e1e1e !important;
+    color: #aaa !important;
+}
+
+/* Кнопки действий в таблице */
+.filebrowser .navigator-list .column-action .action-button,
+.filebrowser .navigator-table .column-action .action-button {
+    background-color: #3a3a3a !important;
+    color: #ddd !important;
+    border: 1px solid #555 !important;
+}
+
+.filebrowser .navigator-list .column-action .action-button:hover,
+.filebrowser .navigator-table .column-action .action-button:hover {
+    background-color: #4a4a4a !important;
+    color: #fff !important;
+    border-color: #79aec8 !important;
+}
+
+/* Хлебные крошки */
+.navigator-breadcrumbs {
+    background-color: #1e1e1e !important;
+}
+
+.navigator-breadcrumbs a {
+    color: #79aec8 !important;
+}
+
+.navigator-breadcrumbs-folder-name {
+    color: #f0f0f0 !important;
+}
+
+/* Поле поиска */
+.filter-files-field {
+    background-color: #3a3a3a !important;
+    color: #f0f0f0 !important;
+    border-color: #555 !important;
+}
+
+/* Сообщение "Нет файлов" */
+.no-files {
+    color: #888 !important;
+}
+
+/* Иконки */
+.filer-icon,
+.fa {
+    color: #ddd !important;
+}

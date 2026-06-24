@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <!-- ============================================ -->
+    <!-- БАЗОВЫЕ МЕТАДАННЫЕ                            -->
+    <!-- ============================================ -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeoForge — Личный лаунчер и портфолио разработчика</title>
+    
+    <!-- ============================================ -->
+    <!-- FAVICON И ИКОНКИ ДЛЯ ВСЕХ ПЛАТФОРМ           -->
+    <!-- ============================================ -->
+    <link rel="icon" type="image/svg+xml" href="{{ static('icon/logo.svg') }}">
+    <link rel="alternate icon" href="{{ static('icon/favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ static('icon/favicon-16x16.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ static('icon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ static('icon/favicon-64x64.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ static('icon/apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ static('icon/site.webmanifest') }}">
+    <meta name="theme-color" content="#1A0E0A">
+    <meta name="msapplication-TileColor" content="#1A0E0A">
+    <meta name="msapplication-config" content="{{ static('icon/browserconfig.xml') }}">
+    
+    <!-- ============================================ -->
+    <!-- SEO ОПТИМИЗАЦИЯ                              -->
+    <!-- ============================================ -->
+    <meta name="description" content="LeoForge — личный лаунчер и портфолио разработчика. Управление ботами, проекты, достижения и контакты.">
+    <meta name="keywords" content="LeoForge, портфолио, разработчик, боты, лаунчер, проекты, программирование">
+    <meta name="author" content="Leo">
+    <meta name="robots" content="index, follow">
+    
+    <meta property="og:title" content="LeoForge — Личный лаунчер и портфолио разработчика">
+    <meta property="og:description" content="Управление ботами, портфолио проектов и разработка.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{{ static('icon/social-preview.png') }}">
+    <meta property="og:image:width" content="1280">
+    <meta property="og:image:height" content="640">
+    <meta property="og:site_name" content="LeoForge">
+    <meta property="og:locale" content="ru_RU">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LeoForge — Личный лаунчер и портфолио разработчика">
+    <meta name="twitter:description" content="Управление ботами, портфолио проектов и разработка.">
+    <meta name="twitter:image" content="{{ static('icon/social-preview.png') }}">
+    
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    
+    <!-- ============================================ -->
+    <!-- СТИЛИ                                        -->
+    <!-- ============================================ -->
+    <link rel="stylesheet" href="{{ sass_src('scss/base.scss') }}">
+
+</head>
+<body>
+    <!-- ============================================ -->
+    <!-- ДЕКОРАТИВНАЯ ИКОНКА СТРЕЛЬЦА                  -->
+    <!-- ============================================ -->
+    <div class="sagittarius-icon" aria-hidden="true"></div>
+    
+    <!-- ============================================ -->
+    <!-- HEADER                                       -->
+    <!-- ============================================ -->
+    <header>
+        <div class="burger" id="burgerMenu" aria-label="Открыть меню" role="button" tabindex="0">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <a href="/" class="logo" aria-label="LeoForge - Главная">
+            <span class="logo-icon">
+                {% include 'logo.svg' %}
+            </span>
+            <span>LeoForge</span>
+        </a>
+        
+        <nav id="mainNav" aria-label="Основное меню">
+            <a href="/" class="active" aria-current="page">🏠 Главная</a>
+            <a href="/blog/">📝 Блог</a>
+            
+            <div class="dropdown" id="portfolioDropdown">
+                <div class="dropdown-toggle" id="portfolioToggle" role="button" tabindex="0">📁 Портфолио</div>
+                <div class="dropdown-menu" id="portfolioMobileMenu">
+                    <a href="/portfolio/"><span class="modal-item-icon">📊</span> Обзор</a>
+                    <a href="/portfolio/projects/"><span class="modal-item-icon">📂</span> Мои проекты <span class="modal-item-badge">12</span></a>
+                    <a href="/portfolio/achievements/"><span class="modal-item-icon">🏆</span> Достижения <span class="modal-item-badge">8</span></a>
+                    <a href="/portfolio/resume/"><span class="modal-item-icon">📄</span> Резюме <span class="modal-item-badge">PDF</span></a>
+                </div>
+            </div>
+            
+            <div class="dropdown" id="appsDropdown">
+                <div class="dropdown-toggle" id="appsToggle" role="button" tabindex="0">📱 Приложения</div>
+                <div class="dropdown-menu" id="appsMobileMenu">
+                    <a href="/apps/discord1/"><span class="modal-item-icon">🎮</span> Discord Bot 1 <span class="modal-item-badge">Активен</span></a>
+                    <a href="/apps/discord2/"><span class="modal-item-icon">🎮</span> Discord Bot 2 <span class="modal-item-badge">Активен</span></a>
+                    <a href="/apps/telegram/"><span class="modal-item-icon">🤖</span> Telegram Bot <span class="modal-item-badge">Активен</span></a>
+                    <a href="/apps/dating/"><span class="modal-item-icon">❤️</span> Знакомства <span class="modal-item-badge">Новое</span></a>
+                </div>
+            </div>
+            
+            <a href="/contacts/">📞 Контакты</a>
+        </nav>
+        
+        <div class="profile" id="profileDropdown" role="button" tabindex="0" aria-label="Профиль пользователя">
+            <div class="profile-trigger">
+                <div class="user">
+                    {% if request.user.first_name %}
+                      {{ request.user.first_name }}
+                      {% if request.user.last_name %}
+                        {{ request.user.last_name }}
+                      {% endif %}
+                    {% else %}
+                      {{ request.user.username }}
+                    {% endif %}
+                </div>
+                <div class="avatar">
+                    {% if request.user.avatar %}
+                        <img src="{{ request.user.avatar.url }}" alt="Аватар пользователя" width="40" height="40">
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="profile-menu" id="profileMenu">
+                <a href="/profile/"><span class="profile-menu-icon">👤</span> Мой профиль</a>
+                <a href="/settings/"><span class="profile-menu-icon">⚙️</span> Настройки</a>
+                <a href="/security/"><span class="profile-menu-icon">🔒</span> Безопасность</a>
+                <div class="profile-menu-divider"></div>
+                <a href="/logout/" class="profile-menu-logout"><span class="profile-menu-icon">🚪</span> Выход</a>
+            </div>
+        </div>
+    </header>
+    
+    <!-- ============================================ -->
+    <!-- МОДАЛЬНЫЕ ОКНА                               -->
+    <!-- ============================================ -->
+    
+    <div class="modal-overlay" id="portfolioModal" role="dialog" aria-modal="true" aria-labelledby="portfolioModalTitle">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h2 id="portfolioModalTitle">📁 Портфолио</h2>
+                <button class="modal-close" id="portfolioModalClose" aria-label="Закрыть">✕</button>
+            </div>
+            <div class="modal-body">
+                <a href="/portfolio/"><span class="modal-item-icon">📊</span> Обзор <span class="modal-item-badge">Главная</span></a>
+                <a href="/portfolio/projects/"><span class="modal-item-icon">📂</span> Мои проекты <span class="modal-item-badge">12</span></a>
+                <a href="/portfolio/achievements/"><span class="modal-item-icon">🏆</span> Достижения <span class="modal-item-badge">8</span></a>
+                <a href="/portfolio/resume/"><span class="modal-item-icon">📄</span> Резюме <span class="modal-item-badge">PDF</span></a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="appsModal" role="dialog" aria-modal="true" aria-labelledby="appsModalTitle">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h2 id="appsModalTitle">📱 Приложения</h2>
+                <button class="modal-close" id="appsModalClose" aria-label="Закрыть">✕</button>
+            </div>
+            <div class="modal-body">
+                <a href="/apps/discord1/"><span class="modal-item-icon">🎮</span> Discord Bot 1 <span class="modal-item-badge">Активен</span></a>
+                <a href="/apps/discord2/"><span class="modal-item-icon">🎮</span> Discord Bot 2 <span class="modal-item-badge">Активен</span></a>
+                <a href="/apps/telegram/"><span class="modal-item-icon">🤖</span> Telegram Bot <span class="modal-item-badge">Активен</span></a>
+                <a href="/apps/dating/"><span class="modal-item-icon">❤️</span> Знакомства <span class="modal-item-badge">Новое</span></a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- MAIN                                         -->
+    <!-- ============================================ -->
+    <main>
+        <aside id="sidePanel">
+            <div class="aside-module">
+                <h3>📊 Статистика</h3>
+                <ul>
+                    <li>Активные боты <span>3</span></li>
+                    <li>Пользователей <span>1 234</span></li>
+                    <li>Запросов <span>45 678</span></li>
+                </ul>
+            </div>
+            
+            <div class="aside-module">
+                <h3>🔗 Быстрые ссылки</h3>
+                <ul>
+                    <li><a href="/settings/">Настройки</a></li>
+                    <li><a href="/logs/">Логи</a></li>
+                    <li><a href="/analytics/">Аналитика</a></li>
+                    <li><a href="/api/">API</a></li>
+                </ul>
+            </div>
+
+            <div class="aside-module">
+                <h3>🎯 Активность</h3>
+                <ul>
+                    <li>Онлайн <span>12</span></li>
+                    <li>Новых <span>5</span></li>
+                </ul>
+            </div>
+        </aside>
+        
+        <article>
+            <div class="content-grid">
+                <div class="card">
+                    <span class="card-icon">🤖</span>
+                    <h2>Telegram Bot</h2>
+                    <p>Управление Telegram ботом. Настройка команд, рассылка, модерация и аналитика.</p>
+                    <span class="card-tag">Активен</span>
+                </div>
+                
+                <div class="card">
+                    <span class="card-icon">🎮</span>
+                    <h2>Discord Bot 1</h2>
+                    <p>Discord бот для управления сервером, музыкой, ролями и автоматизацией.</p>
+                    <span class="card-tag">Активен</span>
+                </div>
+                
+                <div class="card">
+                    <span class="card-icon">🎮</span>
+                    <h2>Discord Bot 2</h2>
+                    <p>Второй Discord бот для дополнительных функций и экспериментов.</p>
+                    <span class="card-tag">Активен</span>
+                </div>
+                
+                <div class="card">
+                    <span class="card-icon">❤️</span>
+                    <h2>Знакомства</h2>
+                    <p>Альтернатива Дайвинчику. Умный подбор пар, общение и встречи.</p>
+                    <span class="card-tag">Новое</span>
+                </div>
+                
+                <div class="card">
+                    <span class="card-icon">📁</span>
+                    <h2>Портфолио</h2>
+                    <p>Мои проекты, навыки, достижения и опыт в разработке.</p>
+                    <span class="card-tag">Обновлено</span>
+                </div>
+                
+                <div class="card">
+                    <span class="card-icon">📝</span>
+                    <h2>Блог</h2>
+                    <p>Статьи о разработке, IT-новости, обзоры технологий и личный опыт.</p>
+                    <span class="card-tag">Новое</span>
+                </div>
+                
+                <div class="card">
+                    <span class="card-icon">👥</span>
+                    <h2>Команда</h2>
+                    <p>Наша команда разработчиков, роли и вклад в проекты.</p>
+                    <span class="card-tag">Инфо</span>
+                </div>
+                
+                <div class="card">
+                    <span class="card-icon">📞</span>
+                    <h2>Контакты</h2>
+                    <p>Связь с нами: email, социальные сети, мессенджеры.</p>
+                    <span class="card-tag">Контакты</span>
+                </div>
+                
+                <div class="card">
+                    <span class="card-icon">⚙️</span>
+                    <h2>Настройки</h2>
+                    <p>Общие настройки системы, профиля, уведомлений и безопасности.</p>
+                    <span class="card-tag">Система</span>
+                </div>
+            </div>
+        </article>
+    </main>
+    
+    <!-- ============================================ -->
+    <!-- FOOTER                                       -->
+    <!-- ============================================ -->
+    <footer>
+        <div class="footer-content">
+            <span>© 2026 LeoForge</span>
+            <span class="divider">•</span>
+            <a href="/privacy/">Политика конфиденциальности</a>
+            <span class="divider">•</span>
+            <a href="/support/">Поддержка</a>
+            <span class="divider">•</span>
+            <a href="https://github.com/your-repo" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+    </footer>
+
+    <!-- ============================================ -->
+    <!-- SCRIPTS                                      -->
+    <!-- ============================================ -->
+    <script>
+        // Бургер-меню
+        const burger = document.getElementById('burgerMenu');
+        const nav = document.getElementById('mainNav');
+        const aside = document.getElementById('sidePanel');
+        const body = document.body;
+
+        burger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            nav.classList.toggle('active');
+            aside.classList.remove('active');
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.remove('active');
+            });
+        });
+
+        // Aside (двойной клик по логотипу)
+        document.querySelector('.logo').addEventListener('dblclick', (e) => {
+            e.preventDefault();
+            aside.classList.toggle('active');
+            nav.classList.remove('active');
+        });
+
+        // Профиль
+        const profile = document.getElementById('profileDropdown');
+        const profileMenu = document.getElementById('profileMenu');
+
+        profile.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileMenu.classList.toggle('active');
+            nav.classList.remove('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.profile')) {
+                profileMenu.classList.remove('active');
+            }
+        });
+
+        // Определение устройства
+        function isDesktop() {
+            return window.innerWidth >= 1280;
+        }
+
+        // Модальные окна
+        const portfolioModal = document.getElementById('portfolioModal');
+        const portfolioToggle = document.getElementById('portfolioToggle');
+        const portfolioClose = document.getElementById('portfolioModalClose');
+        const portfolioMobileMenu = document.getElementById('portfolioMobileMenu');
+
+        const appsModal = document.getElementById('appsModal');
+        const appsToggle = document.getElementById('appsToggle');
+        const appsClose = document.getElementById('appsModalClose');
+        const appsMobileMenu = document.getElementById('appsMobileMenu');
+
+        function togglePortfolio(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (isDesktop()) {
+                nav.classList.remove('active');
+                portfolioModal.classList.add('active');
+                body.style.overflow = 'hidden';
+            } else {
+                portfolioMobileMenu.classList.toggle('active');
+                appsMobileMenu.classList.remove('active');
+            }
+        }
+
+        function toggleApps(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (isDesktop()) {
+                nav.classList.remove('active');
+                appsModal.classList.add('active');
+                body.style.overflow = 'hidden';
+            } else {
+                appsMobileMenu.classList.toggle('active');
+                portfolioMobileMenu.classList.remove('active');
+            }
+        }
+
+        function closePortfolioModal() {
+            portfolioModal.classList.remove('active');
+            body.style.overflow = '';
+        }
+
+        function closeAppsModal() {
+            appsModal.classList.remove('active');
+            body.style.overflow = '';
+        }
+
+        portfolioToggle.addEventListener('click', togglePortfolio);
+        appsToggle.addEventListener('click', toggleApps);
+
+        portfolioClose.addEventListener('click', closePortfolioModal);
+        appsClose.addEventListener('click', closeAppsModal);
+
+        portfolioModal.addEventListener('click', (e) => {
+            if (e.target === portfolioModal) closePortfolioModal();
+        });
+        appsModal.addEventListener('click', (e) => {
+            if (e.target === appsModal) closeAppsModal();
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.dropdown') && !e.target.closest('.modal-overlay')) {
+                portfolioMobileMenu.classList.remove('active');
+                appsMobileMenu.classList.remove('active');
+            }
+        });
+
+        // Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closePortfolioModal();
+                closeAppsModal();
+                profileMenu.classList.remove('active');
+                portfolioMobileMenu.classList.remove('active');
+                appsMobileMenu.classList.remove('active');
+                nav.classList.remove('active');
+                aside.classList.remove('active');
+            }
+        });
+
+        // Resize
+        window.addEventListener('resize', () => {
+            if (isDesktop()) {
+                portfolioMobileMenu.classList.remove('active');
+                appsMobileMenu.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

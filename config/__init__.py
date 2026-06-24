@@ -91,10 +91,10 @@ def debug_telegram():
     
     # Проверяем наличие бота в INSTALLED_APPS
     installed_apps = getattr(sys.modules[__name__], 'INSTALLED_APPS', [])
-    if 'telebot' in installed_apps or 'apps.telebot' in installed_apps:
-        printf(f"<success>✅ Приложение 'telebot' добавлено в INSTALLED_APPS</success>", style=STYLES)
+    if 'telega' in installed_apps or 'apps.telega' in installed_apps:
+        printf(f"<success>✅ Приложение 'telega' добавлено в INSTALLED_APPS</success>", style=STYLES)
     else:
-        printf(f"<warning>⚠️ Приложение 'telebot' НЕ НАЙДЕНО в INSTALLED_APPS</warning>", style=STYLES)
+        printf(f"<warning>⚠️ Приложение 'telega' НЕ НАЙДЕНО в INSTALLED_APPS</warning>", style=STYLES)
 
 
 def debug_module_loading(module_name: str, status: str = "loaded", error: str = None):

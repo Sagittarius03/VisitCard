@@ -17,6 +17,6 @@ STATICFILES_FINDERS = [
 
 MEDIA_ROOT = BASE_DIR / 'media'
 STATICFILES_DIRS = [
-    BASE_DIR / 'apps' / 'static',
+    BASE_DIR / 'apps' / 'main' / 'static',
 ]
 STATIC_ROOT = BASE_DIR / 'static'

@@ -36,7 +36,7 @@ if not SECRET_KEY:
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(', ') # type: ignore
 
-# AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users.User'
 ROOT_URLCONF = 'router'
 USE_SITEMAP = True
 
@@ -58,6 +58,7 @@ TEMPLATES = [
         'APP_DIRS': True,  # Искать в app/templates/
         'DIRS': [
             APPS_DIR / 'templates',
+            STATIC_ROOT / 'icon'
         ],
         'OPTIONS': {
             'environment': 'config.jinja2.env.environment',
@@ -70,9 +71,6 @@ TEMPLATES = [
             },
             
             'context_processors': [
-                'apps.core.context_processors.seo_settings',
-                'apps.core.context_processors.seo_sitemaps',
-                'apps.core.context_processors.styles_context',
             ],
             
             # Расширения Jinja2
