@@ -36,7 +36,7 @@ if not SECRET_KEY:
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(', ') # type: ignore
 
-AUTH_USER_MODEL = 'users.User'
+# AUTH_USER_MODEL = 'users.User'
 ROOT_URLCONF = 'router'
 USE_SITEMAP = True
 
