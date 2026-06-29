@@ -71,6 +71,7 @@ TEMPLATES = [
             },
             
             'context_processors': [
+                'apps.main.styles.global_context',
             ],
             
             # Расширения Jinja2

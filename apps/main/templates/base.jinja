@@ -3,9 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Начало работы!</title>
+    <title>Hex Glow</title>
+
+    {% set css_files = [] %}
+    {% for style in scss %}
+        {% set _ = css_files.append(sass_src(style)) %}
+    {% endfor %}
+    {{ compress_assets(css_files, 'css') }}
+
 </head>
 <body>
+
+    <canvas id="hexCanvas"></canvas>
+
+    <header>
+        <div class="logo"><span>Hex</span>Glow</div>
+        <nav>
+            {% for i in range(1, 6) %}
+            <a href="" {% if i == 1 %}class="active"{% endif %}>Тест {{i}}</a>
+            {% endfor %}
+        </nav>
+        <div class="profile"></div>
+    </header>
     
+    <main>
+        <aside></aside>
+        <article>
+            <div class="hero">
+                <span class="badge">✨ Плавное свечение</span>
+                <h1>Энергия <span>между гексами</span></h1>
+                <p>
+                    Линии между гексами плавно пульсируют,<br>
+                    создавая эффект живой энергетической сети.
+                </p>
+                <div class="cta-group">
+                    <a href="#" class="btn btn-cta">Погрузиться →</a>
+                    <a href="#" class="btn btn-outline">Узнать</a>
+                </div>
+            </div>
+        </article>
+    </main>
+    
+    <footer>
+        <div class="info">
+            <a href="#">О нас</a>
+            <a href="#">Политика</a>
+            <a href="#">Контакты</a>
+        </div>
+        <div class="social"><span></span><span></span><span></span></div>
+        <div class="coopyrate">2026 Hex Glow</div>
+    </footer>
+
+    <script src="{{ static('main/js/hex-glow.js') }}"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.querySelector('header');
+            const nav = document.querySelector('nav');
+            const profile = document.querySelector('.profile');
+            
+            const burger = document.createElement('div');
+            burger.className = 'burger-menu';
+            burger.textContent = '☰';
+            burger.style.cssText = `
+                display: none;
+                font-size: 22px;
+                cursor: pointer;
+                color: var(--color-text-secondary);
+                padding: 2px 8px;
+                border-radius: 4px;
+                order: 3;
+            `;
+            
+            header.insertBefore(burger, profile);
+            
+            burger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                nav.classList.toggle('open');
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (!nav.contains(e.target) && !burger.contains(e.target)) {
+                    nav.classList.remove('open');
+                }
+            });
+            
+            function checkMobile() {
+                if (window.innerWidth <= 768) {
+                    burger.style.display = 'block';
+                } else {
+                    burger.style.display = 'none';
+                    nav.classList.remove('open');
+                }
+            }
+            
+            checkMobile();
+            window.addEventListener('resize', checkMobile);
+        });
+    </script>
+    
+    {% set js_files = [] %}
+    {% set _ = js_files.append(static('main/js/search.js')) %}
+    {{ compress_assets(js_files, 'js') }}
 </body>
 </html>
