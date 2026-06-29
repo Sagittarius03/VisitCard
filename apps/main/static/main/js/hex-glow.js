@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Цвета
-    const BG_COLOR = '#181b1f';     
-    const GRID_COLOR = '#2a2e35';   
+    const BG_COLOR = '#282828';     
+    const GRID_COLOR = '#1c1c1c';   
     
     // ===== ЛОГИКА РАДИАЛЬНОГО ЛУЧА =====
     let centerX = 0;
