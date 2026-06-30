@@ -1,10 +1,41 @@
-// hex-glow.js — Абсолютный приоритет клика (исправлен pointer-events)
+// hex-glow.js — Полный контроль над Alpha (убраны скрытые коэффициенты)
 
 document.addEventListener('DOMContentLoaded', function() {
     const canvas = document.getElementById('hexCanvas');
     if (!canvas) return;
     
-    // ===== ВАЖНО: Разрешаем кликать по холсту =====
+    // =====================================================
+    //  НАСТРОЙКИ (Цвета в формате [R, G, B] + Альфы)
+    // =====================================================
+    const CONFIG = {
+        // Размеры и сетка
+        hexSize: 20,            
+        baseLineWidth: 1,       // Толщина фоновой сетки
+        
+        // Анимация
+        maxRadius: 1000,        // Дальность расхождения
+        speed: 400,             // Скорость расширения
+        minWait: 1.5,           
+        maxWait: 4.0,           
+        
+        // ===== ЦВЕТА ФОНА И СЕТКИ =====
+        bgColor: [243, 243, 243], 
+        gridColor: [217, 217, 217], 
+        
+        // ===== НЕОН (ГАЛО / ТЕНЬ) =====
+        glowColor: [140, 0, 255],  
+        glowAlpha: 1,            // Прозрачность гало
+        glowLineWidth: 2,          
+        glowBlur: 1,               
+        
+        // ===== ЯДРО (ОСНОВНАЯ ЛИНИЯ) =====
+        coreColor: [140, 255, 0],  
+        coreAlpha: 0.8,            // Прозрачность ядра (увеличил для примера)
+        coreLineWidth: 10,          
+    };
+    // =====================================================
+
+    // Разрешаем кликать
     canvas.style.pointerEvents = 'auto';
     
     const ctx = canvas.getContext('2d');
@@ -18,10 +49,9 @@ document.addEventListener('DOMContentLoaded', function() {
     resize();
     window.addEventListener('resize', resize);
     
-    // ===== НАСТРОЙКИ ГЕКСОВ =====
-    const BASE_SIZE = 40;       
-    const LINE_WIDTH = 1.0;     
-    const HEX_SIZE = BASE_SIZE - (LINE_WIDTH / 2);
+    // ===== ГЕОМЕТРИЯ ГЕКСОВ =====
+    const BASE_SIZE = CONFIG.hexSize;
+    const HEX_SIZE = BASE_SIZE - (CONFIG.baseLineWidth / 2);
     const WIDTH_STEP = HEX_SIZE * Math.sqrt(3);
     const HEIGHT_STEP = HEX_SIZE * 1.5;
     
@@ -53,11 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return pts;
     }
     
-    // Цвета
-    const BG_COLOR = '#282828';     
-    const GRID_COLOR = '#1c1c1c';   
-    
-    // ===== ЛОГИКА РАДИАЛЬНОГО ЛУЧА =====
+    // ===== ЛОГИКА ИМПУЛЬСА =====
     let centerX = 0;
     let centerY = 0;
     let currentRadius = 0;
@@ -65,116 +91,120 @@ document.addEventListener('DOMContentLoaded', function() {
     let isActive = false;
     let timer = 0; 
     
-    const MAX_RADIUS = 600;      
-    const SPEED = 400;           
-    const MIN_WAIT = 1.5;        
-    const MAX_WAIT = 4.0;        
-    
-    // Мгновенный старт с любой точки
     function startPulseFrom(x, y) {
-        isActive = false;          // Мгновенно убиваем предыдущую анимацию
+        isActive = false;          
         centerX = x;
         centerY = y;
-        currentRadius = 20;
+        currentRadius = 10;
         intensity = 1.0;
-        isActive = true;           // Запускаем новую ровно здесь
+        isActive = true;           
     }
     
-    // Автоматический старт в случайном месте (фоновый режим)
     function startRandomPulse() {
-        if (isActive) return; // Не мешаем активной анимации клика
+        if (isActive) return;
         startPulseFrom(Math.random() * W, Math.random() * H);
     }
     
-    // ===== ПРЯМОЙ ОБРАБОТЧИК КЛИКА =====
-    // Вешаем обработчик на весь документ, чтобы поймать клик 100%
     document.addEventListener('click', function(e) {
-        // Получаем координаты мыши относительно холста
         const rect = canvas.getBoundingClientRect();
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
         
-        // Если клик был внутри холста, запускаем анимацию
         if (mouseX >= 0 && mouseX <= W && mouseY >= 0 && mouseY <= H) {
-            timer = 0; // Сбрасываем таймер ожидания
+            timer = 0;
             startPulseFrom(mouseX, mouseY);
         }
     });
     
-    // ===== РИСОВАНИЕ =====
+    // ===== ОТРИСОВКА =====
     function drawScene() {
+        // 1. Фон
         ctx.clearRect(0, 0, W, H);
-        
-        ctx.fillStyle = BG_COLOR;
+        ctx.fillStyle = `rgb(${CONFIG.bgColor[0]}, ${CONFIG.bgColor[1]}, ${CONFIG.bgColor[2]})`;
         ctx.fillRect(0, 0, W, H);
-        
-        ctx.save();
-        ctx.strokeStyle = GRID_COLOR;
-        ctx.lineWidth = LINE_WIDTH; 
-        ctx.beginPath();
-        for (const hex of hexes) {
-            const pts = getHexPoints(hex.cx, hex.cy, HEX_SIZE);
-            ctx.moveTo(pts[0].x, pts[0].y);
-            for (let i = 1; i < 6; i++) ctx.lineTo(pts[i].x, pts[i].y);
-            ctx.closePath();
-        }
-        ctx.stroke();
-        ctx.restore();
         
         const deltaTime = 1 / 60;
         
         if (isActive) {
-            currentRadius += SPEED * deltaTime;
-            const progress = currentRadius / MAX_RADIUS;
-            intensity = Math.max(0, 1 - progress * 1.2);
+            currentRadius += CONFIG.speed * deltaTime;
+            const progress = currentRadius / CONFIG.maxRadius;
+            intensity = Math.max(0, 1 - Math.pow(progress, 1.2));
             
-            if (currentRadius > MAX_RADIUS || intensity < 0.01) {
+            if (currentRadius > CONFIG.maxRadius || intensity < 0.01) {
                 isActive = false;
-                timer = MIN_WAIT + Math.random() * (MAX_WAIT - MIN_WAIT);
+                timer = CONFIG.minWait + Math.random() * (CONFIG.maxWait - CONFIG.minWait);
             }
         } else {
             timer -= deltaTime;
-            if (timer <= 0) {
-                startRandomPulse();
-            }
+            if (timer <= 0) startRandomPulse();
         }
         
-        if (isActive && intensity > 0.01) {
+        // Извлекаем цвета
+        const gridR = CONFIG.gridColor[0], gridG = CONFIG.gridColor[1], gridB = CONFIG.gridColor[2];
+        const glowR = CONFIG.glowColor[0], glowG = CONFIG.glowColor[1], glowB = CONFIG.glowColor[2];
+        const coreR = CONFIG.coreColor[0], coreG = CONFIG.coreColor[1], coreB = CONFIG.coreColor[2];
+        
+        for (const hex of hexes) {
+            const pts = getHexPoints(hex.cx, hex.cy, HEX_SIZE);
+            
+            const dx = hex.cx - centerX;
+            const dy = hex.cy - centerY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            let alpha = 0;
+            let brightness = 0;
+            
+            if (isActive && dist < currentRadius) {
+                const distanceFactor = 1 - (dist / currentRadius);
+                brightness = intensity * Math.pow(distanceFactor, 1.5);
+                alpha = Math.min(1, brightness * 1.2);
+            }
+            
+            // ФОНОВАЯ СЕТКА
             ctx.save();
-            
+            ctx.strokeStyle = `rgb(${gridR}, ${gridG}, ${gridB})`;
+            ctx.lineWidth = CONFIG.baseLineWidth;
             ctx.beginPath();
-            ctx.arc(centerX, centerY, currentRadius, 0, Math.PI * 2);
-            ctx.clip();
+            ctx.moveTo(pts[0].x, pts[0].y);
+            for (let i = 1; i < 6; i++) ctx.lineTo(pts[i].x, pts[i].y);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.restore();
             
-            const grad = ctx.createRadialGradient(
-                centerX, centerY, 0,
-                centerX, centerY, currentRadius
-            );
-            grad.addColorStop(0, `rgba(0, 255, 128, ${0.8 * intensity})`);
-            grad.addColorStop(0.3, `rgba(59, 130, 246, ${0.6 * intensity})`);
-            grad.addColorStop(0.7, `rgba(0, 255, 128, ${0.3 * intensity})`);
-            grad.addColorStop(1, `rgba(59, 130, 246, 0)`);
-            
-            ctx.strokeStyle = grad;
-            ctx.lineWidth = 2.2 * intensity;
-            ctx.shadowColor = `rgba(0, 255, 128, ${0.3 * intensity})`;
-            ctx.shadowBlur = 15;
-            
-            ctx.beginPath();
-            for (const hex of hexes) {
-                const pts = getHexPoints(hex.cx, hex.cy, HEX_SIZE);
+            // СВЕЧЕНИЕ
+            if (alpha > 0.01) {
+                // Слой 1: Гало
+                ctx.save();
+                ctx.shadowColor = `rgba(${glowR}, ${glowG}, ${glowB}, ${CONFIG.glowAlpha * alpha})`; // 0.8 убрано!
+                ctx.shadowBlur = CONFIG.glowBlur;
+                ctx.strokeStyle = `rgba(${glowR}, ${glowG}, ${glowB}, ${CONFIG.glowAlpha * alpha})`; // 0.8 убрано!
+                ctx.lineWidth = CONFIG.glowLineWidth * brightness;
+                ctx.beginPath();
                 ctx.moveTo(pts[0].x, pts[0].y);
                 for (let i = 1; i < 6; i++) ctx.lineTo(pts[i].x, pts[i].y);
                 ctx.closePath();
+                ctx.stroke();
+                ctx.restore();
+                
+                // Слой 2: Ядро
+                ctx.save();
+                ctx.shadowColor = 'transparent';
+                ctx.shadowBlur = 0;
+                // Здесь тоже применяется строго coreAlpha без домножений
+                ctx.strokeStyle = `rgba(${coreR}, ${coreG}, ${coreB}, ${CONFIG.coreAlpha * alpha})`;
+                ctx.lineWidth = CONFIG.coreLineWidth * brightness;
+                ctx.beginPath();
+                ctx.moveTo(pts[0].x, pts[0].y);
+                for (let i = 1; i < 6; i++) ctx.lineTo(pts[i].x, pts[i].y);
+                ctx.closePath();
+                ctx.stroke();
+                ctx.restore();
             }
-            ctx.stroke();
-            
-            ctx.restore();
         }
     }
     
     createHexGrid();
-    startRandomPulse(); // Первая вспышка при загрузке
+    startRandomPulse();
     
     function loop(timestamp) {
         time = timestamp / 1000;
